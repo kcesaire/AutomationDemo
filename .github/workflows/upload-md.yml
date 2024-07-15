@@ -1,0 +1,24 @@
+name: Upload Markdown Files to Azure Blob Storage
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'documentation/**/*.md'
+
+jobs:
+  upload-to-storage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Upload Markdown Files
+        run: |
+          az storage blob upload-batch --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} --account-key ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }} --destination automationdemo --source documentation/
+          # Replace <YourBlobContainerName> with your actual Azure Blob container name.
