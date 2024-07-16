@@ -1,0 +1,20 @@
+# GitHub Actions repository workflow file, e.g .github/workflows/upload.yml
+
+# ...
+# previous steps to choose a runner type, authenticate to Azure, prepare files, etc
+# ...
+
+# Upload `.md`s to Azure Blob Storage
+name: Upload Markdown Files to Azure Blob Storage
+id: upload
+uses: github-developer/upload-azure-blob@v1
+with:
+  account: explorerstestdata
+  destination: automationdemo
+  source: 'documentation/**/*.md'
+
+# Print out the urls to uploaded files
+name: Print URLs
+run: echo $URLS # { ["filename":"hulatocat.png","url":"https://octodex.blob.core.windows.net/octocats/hulatocat.png"] }
+env:
+  URLS: ${{ steps.upload.outputs.urls }}
